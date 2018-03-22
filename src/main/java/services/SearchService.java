@@ -1,6 +1,6 @@
-package linkedin.automation.services;
+package services;
 
-import linkedin.automation.pages.SearchPage;
+import pages.SearchPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
