@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * Created on 22.03.2018
  */
-public class SearchService {
+public class SearchResultService {
     private SearchPage searchPage;
 
-    public SearchService(WebDriver driver) {
+    public SearchResultService(WebDriver driver) {
         searchPage = new SearchPage(driver);
     }
 

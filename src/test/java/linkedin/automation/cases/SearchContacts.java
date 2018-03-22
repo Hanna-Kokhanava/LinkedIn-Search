@@ -1,6 +1,7 @@
 package linkedin.automation.cases;
 
-import services.SearchService;
+import services.HomeService;
+import services.SearchResultService;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -16,23 +17,23 @@ import java.util.concurrent.TimeUnit;
  * Created on 04.03.2018
  */
 public class SearchContacts extends BaseCase {
-    private SearchService searchService;
+    private SearchResultService searchResultService;
+    private HomeService homeService;
+
+    private static final String SEARCH_VALUE = "HR manager";
 
     @BeforeClass
-    public void initialize() {
-        searchService = new SearchService(driver);
+    public void initializeServices() {
+        searchResultService = new SearchResultService(driver);
+        homeService = new HomeService(driver);
     }
 
-    @Test
-    public void goToSearch() {
-        WebElement searchField = driver.findElement(By.className("nav-search-typeahead"));
-        searchField.click();
-        WebElement searchInput = driver.findElement(By.xpath("//*[@class='nav-search-typeahead']//input"));
-        searchInput.sendKeys("HR manager");
-        searchInput.sendKeys(Keys.RETURN);
+    @Test(description = "Go to Search input and type search value")
+    public void searchByValue() {
+        homeService.searchByValue(SEARCH_VALUE);
     }
 
-    @Test(dependsOnMethods = {"goToSearch"})
+    @Test(dependsOnMethods = {"searchByValue"})
     public void setFilters() throws InterruptedException {
         WebElement locationsFilter = driver.findElement(By.xpath("//li[contains(@class,'GeoRegion')]"));
         locationsFilter.click();
@@ -66,7 +67,7 @@ public class SearchContacts extends BaseCase {
 
     @Test(dependsOnMethods = {"setFilters"})
     public void getPersonInfo() {
-        searchService.getPersonBlocksList();
+        searchResultService.getPersonBlocksList();
 
     }
 }

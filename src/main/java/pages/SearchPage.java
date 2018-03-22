@@ -11,13 +11,10 @@ import java.util.List;
  * Created on 22.03.2018
  */
 public class SearchPage {
-    private WebDriver driver;
-
     @FindBy(xpath = "//li[contains(@class, 'search-result')]")
     private List<WebElement> personBlocks;
 
     public SearchPage(WebDriver driver) {
-        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
