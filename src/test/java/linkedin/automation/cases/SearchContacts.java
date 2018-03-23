@@ -21,6 +21,7 @@ public class SearchContacts extends BaseCase {
     private HomeService homeService;
 
     private static final String SEARCH_VALUE = "HR manager";
+    private static final String COUNTRY_FILTER_VALUE = "Poland";
 
     @BeforeClass
     public void initializeServices() {
@@ -39,7 +40,7 @@ public class SearchContacts extends BaseCase {
         locationsFilter.click();
         WebElement filterInput = driver.findElement(By.xpath("//li[contains(@class,'search-s-add-facet')]//input"));
         filterInput.click();
-        filterInput.sendKeys("Poland");
+        filterInput.sendKeys(COUNTRY_FILTER_VALUE);
         Sleeper.SYSTEM_SLEEPER.sleep(new org.openqa.selenium.support.ui.Duration(1, TimeUnit.SECONDS));
         filterInput.sendKeys(Keys.ENTER);
 
