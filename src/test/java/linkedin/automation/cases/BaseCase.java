@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class BaseCase {
     private static final String WIN_PATH_TO_CHROMEDRIVER_EXE = "./drivers/chromedriver.exe";
     private static final String MAC_PATH_TO_CHROMEDRIVER_EXE = "./drivers/chromedriver";
-    private static final String URL = "https://www.linkedin.com";
+    private static final String URL = "http://www.linkedin.com";
     protected static WebDriver driver;
     protected WebDriverWait waiter;
 
@@ -31,7 +31,7 @@ public abstract class BaseCase {
             options.addArguments("user-data-dir=/Users/" + currentUserName + "/Library/Application Support/Google/Chrome/Default");
         } else {
             System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, WIN_PATH_TO_CHROMEDRIVER_EXE);
-            options.addArguments("user-data-dir=C:/Users/" + currentUserName + "/Ania/AppData/Local/Google/Chrome/User Data/Default");
+            options.addArguments("user-data-dir=C:/Users/" + currentUserName + "/AppData/Local/Google/Chrome/User Data/Default");
         }
         options.addArguments("--start-maximized");
 

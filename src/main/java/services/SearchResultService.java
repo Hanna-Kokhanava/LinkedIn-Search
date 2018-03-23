@@ -30,17 +30,33 @@ public class SearchResultService {
         return searchResultPage.getPeopleBlocksList();
     }
 
+    public void applyIndustryFilter() {
+        getPage().getAllFiltersButton().click();
+
+    }
+
     /**
-     * Click on 'Location' filter to open DDL list, print location and press 'Enter' button
+     * Click on 'Location' filter to open DDL list, print location string and press 'Enter' button
      *
      * @param locationFilterValue - needed location value
      */
-    public void setLocationFilter(String locationFilterValue) {
-        getPage().getLocationsFilter().click();
-        WebElement filterInput = getPage().getDropDownFilterBlock().getFilterInput();
+    public void applyLocationSingleFilter(String locationFilterValue) {
+        getPage().getLocationsFilterButton().click();
+        setFilterValue(locationFilterValue);
+        getPage().getSingleFilterBlock().getApplyFilterButton().click();
+    }
+
+    /**
+     * Set filter string value into input element0
+     *
+     * @param locationFilterValue - needed location value
+     */
+    private void setFilterValue(String locationFilterValue) {
+        WebElement filterInput = getPage().getSingleFilterBlock().getFilterInput();
+        WebElement hintsBlock = getPage().getSingleFilterBlock().getFilterHintsBlock();
         filterInput.click();
         filterInput.sendKeys(locationFilterValue);
-        waiter.until(ExpectedConditions.visibilityOf(getPage().getDropDownFilterBlock().getFilterHintsBlock()));
+        waiter.until(ExpectedConditions.visibilityOf(hintsBlock));
         filterInput.sendKeys(Keys.ENTER);
     }
 
