@@ -2,6 +2,7 @@ package services;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 import pages.HomePage;
 
 /**
@@ -11,14 +12,14 @@ public class HomeService {
     private HomePage homePage;
 
     public HomeService(WebDriver driver) {
-        homePage = new HomePage(driver);
+        homePage = PageFactory.initElements(driver, HomePage.class);
     }
 
     /**
-     * Click on search field, type search criteria to the input
+     * Click on search field and type search criteria to the input
      * @param searchValue - search value
      */
-    public void searchByValue(String searchValue) {
+    public void goToSearchFormAndTypeValue(String searchValue) {
         homePage.getSearchField().click();
         homePage.getSearchInput().sendKeys(searchValue);
         homePage.getSearchInput().sendKeys(Keys.RETURN);

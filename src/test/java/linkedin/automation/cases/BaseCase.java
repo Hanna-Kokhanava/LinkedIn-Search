@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
@@ -17,6 +18,7 @@ public abstract class BaseCase {
     private static final String MAC_PATH_TO_CHROMEDRIVER_EXE = "./drivers/chromedriver";
     private static final String URL = "https://www.linkedin.com";
     protected static WebDriver driver;
+    protected WebDriverWait waiter;
 
     @BeforeSuite
     public void setUp() {
@@ -34,8 +36,9 @@ public abstract class BaseCase {
         options.addArguments("--start-maximized");
 
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get(URL);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.navigate().to(URL);
+        waiter = new WebDriverWait(driver, 5);
     }
 
     @AfterSuite

@@ -3,7 +3,6 @@ package linkedin.automation.cases;
 import services.HomeService;
 import services.SearchResultService;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Duration;
@@ -21,28 +20,22 @@ public class SearchContacts extends BaseCase {
     private HomeService homeService;
 
     private static final String SEARCH_VALUE = "HR manager";
-    private static final String COUNTRY_FILTER_VALUE = "Poland";
+    private static final String LOCATION_FILTER_VALUE = "Poland";
 
     @BeforeClass
     public void initializeServices() {
-        searchResultService = new SearchResultService(driver);
+        searchResultService = new SearchResultService(driver, waiter);
         homeService = new HomeService(driver);
     }
 
     @Test(description = "Go to Search input and type search value")
     public void searchByValue() {
-        homeService.searchByValue(SEARCH_VALUE);
+        homeService.goToSearchFormAndTypeValue(SEARCH_VALUE);
     }
 
     @Test(dependsOnMethods = {"searchByValue"})
     public void setFilters() throws InterruptedException {
-        WebElement locationsFilter = driver.findElement(By.xpath("//li[contains(@class,'GeoRegion')]"));
-        locationsFilter.click();
-        WebElement filterInput = driver.findElement(By.xpath("//li[contains(@class,'search-s-add-facet')]//input"));
-        filterInput.click();
-        filterInput.sendKeys(COUNTRY_FILTER_VALUE);
-        Sleeper.SYSTEM_SLEEPER.sleep(new org.openqa.selenium.support.ui.Duration(1, TimeUnit.SECONDS));
-        filterInput.sendKeys(Keys.ENTER);
+        searchResultService.setLocationFilter(LOCATION_FILTER_VALUE);
 
         WebElement applyButton = driver.findElement(By.xpath("//button[contains(@class, 'apply-button')]"));
         Sleeper.SYSTEM_SLEEPER.sleep(new org.openqa.selenium.support.ui.Duration(1, TimeUnit.SECONDS));
