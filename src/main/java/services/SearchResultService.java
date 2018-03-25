@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
+import pages.elements.search.items.SearchResultItem;
 
 import java.util.List;
 
@@ -27,14 +28,15 @@ public class SearchResultService {
         this.waiter = waiter;
     }
 
-    public List<WebElement> getPersonBlocksList() {
-        return searchResultPage.getSearchResultsBlock().getPeopleContainersList();
+    public List<SearchResultItem> getPersonBlocksList() {
+        return searchResultPage.getSearchResultsBlock().getPersonContainersList();
     }
 
     /**
      * Click on 'All Filters' button and check 'All people filters' block appears
      */
     public boolean openAllFiltersAndCheckBlock(String blockTitleString) {
+        System.out.println("Click 'All filters' button and check that filter block appears");
         WebElement allFiltersButton = getPage().getAllFiltersButton();
         waiter.until(ExpectedConditions.visibilityOf(allFiltersButton));
         allFiltersButton.click();
@@ -46,6 +48,7 @@ public class SearchResultService {
      * Click on 'Apply' button on the top bar to close dropdown filters block
      */
     public void clickApplyFiltersButton() {
+        System.out.println("Click 'Apply' filter button");
         getPage().getAllFiltersDropDownBlock().getApplyFilterButton().click();
     }
 
@@ -55,6 +58,7 @@ public class SearchResultService {
      * @param locationFilterValue filter string value
      */
     public void applyLocationFilter(String locationFilterValue) {
+        System.out.println("Set 'Location' filter value as " + locationFilterValue);
         WebElement filterInput = getPage().getAllFiltersDropDownBlock().getLocationsFilterContainer().getFilterInput();
         setFilterValue(filterInput, locationFilterValue);
     }
@@ -65,6 +69,7 @@ public class SearchResultService {
      * @param industryFilterValue filter string value
      */
     public void applyIndustryFilter(String industryFilterValue) {
+        System.out.println("Set 'Industry' filter value as " + industryFilterValue);
         WebElement filterInput = getPage().getAllFiltersDropDownBlock().getIndustryFilterContainer().getFilterInput();
         setFilterValue(filterInput, industryFilterValue);
     }

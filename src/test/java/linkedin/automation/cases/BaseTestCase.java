@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created on 04.03.2018
  */
-public abstract class BaseCase {
+public abstract class BaseTestCase {
     private static final String WIN_PATH_TO_CHROMEDRIVER = "./drivers/chromedriver 2.37.exe";
     private static final String MAC_PATH_TO_CHROMEDRIVER = "./drivers/chromedriver";
     private static final String URL = "http://www.linkedin.com";

@@ -20,6 +20,7 @@ public class HomeService {
      * @param searchValue - search value
      */
     public void goToSearchFormAndTypeValue(String searchValue) {
+        System.out.println("Type search criteria to the input");
         homePage.getSearchField().click();
         homePage.getSearchInput().sendKeys(searchValue);
         homePage.getSearchInput().sendKeys(Keys.RETURN);

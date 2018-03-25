@@ -1,11 +1,11 @@
-package pages.elements.blocks;
+package pages.elements.filters;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import pages.elements.containers.IndustryFilterContainer;
-import pages.elements.containers.LocationFilterContainer;
+import pages.elements.filters.containers.IndustryFilterContainer;
+import pages.elements.filters.containers.LocationFilterContainer;
 
 /**
  * Created on 23.03.2018

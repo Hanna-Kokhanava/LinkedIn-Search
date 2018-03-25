@@ -3,7 +3,7 @@
 <suite name="Linkedin Search" verbose="1">
     <test name="Contacts Search">
         <classes>
-            <class name="linkedin.automation.cases.SearchContacts"/>
+            <class name="linkedin.automation.cases.SearchContactsTest"/>
         </classes>
     </test>
 </suite>

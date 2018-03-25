@@ -9,7 +9,7 @@ import services.SearchResultService;
 /**
  * Created on 04.03.2018
  */
-public class SearchContacts extends BaseCase {
+public class SearchContactsTest extends BaseTestCase {
     private SearchResultService searchResultService;
     private HomeService homeService;
 
@@ -27,12 +27,12 @@ public class SearchContacts extends BaseCase {
     }
 
     @Test(description = "Go to Search input and type search value")
-    public void searchByValue() {
+    public void goToSearchAndTypeValue() {
         homeService.goToSearchFormAndTypeValue(SEARCH_VALUE);
     }
 
-    @Test(dependsOnMethods = {"searchByValue"})
-    public void setFilters() throws InterruptedException {
+    @Test(dependsOnMethods = {"goToSearchAndTypeValue"})
+    public void setFiltersValue() throws InterruptedException {
         Assert.assertTrue(searchResultService.openAllFiltersAndCheckBlock(FILTERS_BLOCK_TITLE),
                 "'All people filters block' is displayed");
         searchResultService.applyLocationFilter(LOCATION_FILTER_VALUE);
@@ -41,7 +41,7 @@ public class SearchContacts extends BaseCase {
         searchResultService.clickApplyFiltersButton();
     }
 
-    @Test(dependsOnMethods = {"setFilters"})
+    @Test(dependsOnMethods = {"setFiltersValue"})
     public void getPersonInfo() {
         searchResultService.getPersonBlocksList();
 
