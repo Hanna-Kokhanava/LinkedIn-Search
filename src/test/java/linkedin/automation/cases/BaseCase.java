@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
  * Created on 04.03.2018
  */
 public abstract class BaseCase {
-    private static final String WIN_PATH_TO_CHROMEDRIVER_EXE = "./drivers/chromedriver.exe";
-    private static final String MAC_PATH_TO_CHROMEDRIVER_EXE = "./drivers/chromedriver";
+    private static final String WIN_PATH_TO_CHROMEDRIVER = "./drivers/chromedriver 2.37.exe";
+    private static final String MAC_PATH_TO_CHROMEDRIVER = "./drivers/chromedriver";
     private static final String URL = "http://www.linkedin.com";
     protected static WebDriver driver;
     protected WebDriverWait waiter;
@@ -27,10 +27,10 @@ public abstract class BaseCase {
 
         ChromeOptions options = new ChromeOptions();
         if (currentOsType.startsWith("Mac")) {
-            System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, MAC_PATH_TO_CHROMEDRIVER_EXE);
+            System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, MAC_PATH_TO_CHROMEDRIVER);
             options.addArguments("user-data-dir=/Users/" + currentUserName + "/Library/Application Support/Google/Chrome/Default");
         } else {
-            System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, WIN_PATH_TO_CHROMEDRIVER_EXE);
+            System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, WIN_PATH_TO_CHROMEDRIVER);
             options.addArguments("user-data-dir=C:/Users/" + currentUserName + "/AppData/Local/Google/Chrome/User Data/Default");
         }
         options.addArguments("--start-maximized");
@@ -38,10 +38,11 @@ public abstract class BaseCase {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().to(URL);
-        waiter = new WebDriverWait(driver, 5);
+
+        waiter = new WebDriverWait(driver, 10);
     }
 
-    @AfterSuite
+    @AfterSuite(alwaysRun = true)
     public void tearDown() {
         driver.close();
         driver.quit();

@@ -3,6 +3,7 @@ package services;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.server.browserlaunchers.Sleeper;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,37 +28,59 @@ public class SearchResultService {
     }
 
     public List<WebElement> getPersonBlocksList() {
-        return searchResultPage.getPeopleBlocksList();
-    }
-
-    public void applyIndustryFilter() {
-        getPage().getAllFiltersButton().click();
-
+        return searchResultPage.getSearchResultsBlock().getPeopleContainersList();
     }
 
     /**
-     * Click on 'Location' filter to open DDL list, print location string and press 'Enter' button
-     *
-     * @param locationFilterValue - needed location value
+     * Click on 'All Filters' button and check 'All people filters' block appears
      */
-    public void applyLocationSingleFilter(String locationFilterValue) {
-        getPage().getLocationsFilterButton().click();
-        setFilterValue(locationFilterValue);
-        getPage().getSingleFilterBlock().getApplyFilterButton().click();
+    public boolean openAllFiltersAndCheckBlock(String blockTitleString) {
+        WebElement allFiltersButton = getPage().getAllFiltersButton();
+        waiter.until(ExpectedConditions.visibilityOf(allFiltersButton));
+        allFiltersButton.click();
+        WebElement blockTitleElement = getPage().getAllFiltersDropDownBlock().getAllFiltersBlockTitle();
+        return blockTitleElement.isDisplayed() && blockTitleElement.getText().equals(blockTitleString);
     }
 
     /**
-     * Set filter string value into input element0
-     *
-     * @param locationFilterValue - needed location value
+     * Click on 'Apply' button on the top bar to close dropdown filters block
      */
-    private void setFilterValue(String locationFilterValue) {
-        WebElement filterInput = getPage().getSingleFilterBlock().getFilterInput();
-        WebElement hintsBlock = getPage().getSingleFilterBlock().getFilterHintsBlock();
+    public void clickApplyFiltersButton() {
+        getPage().getAllFiltersDropDownBlock().getApplyFilterButton().click();
+    }
+
+    /**
+     * Set 'Location' filter value
+     *
+     * @param locationFilterValue filter string value
+     */
+    public void applyLocationFilter(String locationFilterValue) {
+        WebElement filterInput = getPage().getAllFiltersDropDownBlock().getLocationsFilterContainer().getFilterInput();
+        setFilterValue(filterInput, locationFilterValue);
+    }
+
+    /**
+     * Set 'Industry' filter value
+     *
+     * @param industryFilterValue filter string value
+     */
+    public void applyIndustryFilter(String industryFilterValue) {
+        WebElement filterInput = getPage().getAllFiltersDropDownBlock().getIndustryFilterContainer().getFilterInput();
+        setFilterValue(filterInput, industryFilterValue);
+    }
+
+    /**
+     * Type filter value, wait for DDL appears and next click 'enter'
+     *
+     * @param filterInput input element for filter
+     * @param filterValue filter string value
+     */
+    private void setFilterValue(WebElement filterInput, String filterValue) {
         filterInput.click();
-        filterInput.sendKeys(locationFilterValue);
-        waiter.until(ExpectedConditions.visibilityOf(hintsBlock));
+        filterInput.sendKeys(filterValue);
+        waiter.until(ExpectedConditions.attributeContains(filterInput, "aria-expanded", "true"));
+        //Is needed, because script runs too fast and close entire dropdown block
+        Sleeper.sleepTightInSeconds(1);
         filterInput.sendKeys(Keys.ENTER);
     }
-
 }

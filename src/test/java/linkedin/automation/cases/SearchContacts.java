@@ -1,15 +1,10 @@
 package linkedin.automation.cases;
 
-import services.HomeService;
-import services.SearchResultService;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Duration;
-import org.openqa.selenium.support.ui.Sleeper;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.concurrent.TimeUnit;
+import services.HomeService;
+import services.SearchResultService;
 
 /**
  * Created on 04.03.2018
@@ -18,8 +13,12 @@ public class SearchContacts extends BaseCase {
     private SearchResultService searchResultService;
     private HomeService homeService;
 
+    //TODO can be place into property file + PropertyLoader implementation
     private static final String SEARCH_VALUE = "HR manager";
+    private static final String FILTERS_BLOCK_TITLE = "All people filters";
     private static final String LOCATION_FILTER_VALUE = "Poland";
+    private static final String INDUSTRY_FILTER_VALUE1 = "Information Technology and Services";
+    private static final String INDUSTRY_FILTER_VALUE2 = "Human Resources";
 
     @BeforeClass
     public void initializeServices() {
@@ -34,20 +33,12 @@ public class SearchContacts extends BaseCase {
 
     @Test(dependsOnMethods = {"searchByValue"})
     public void setFilters() throws InterruptedException {
-        searchResultService.applyLocationSingleFilter(LOCATION_FILTER_VALUE);
-
-        WebElement allFiltersButton = driver.findElement(By.xpath("//button[contains(@class, 'all-filters')]"));
-        allFiltersButton.click();
-
-        WebElement industryCheckbox = driver.findElement(By.xpath("//*[text()='Human Resources']//parent::li[contains(@class,'search-facet__value')]"));
-        industryCheckbox.click();
-        industryCheckbox = driver.findElement(By.xpath("//*[text()='Information Technology and Services']//parent::li[contains(@class,'search-facet__value')]"));
-        industryCheckbox.click();
-
-        WebElement applyButton = driver.findElement(By.xpath("//button[contains(@class, 'apply-button')]"));
-        applyButton = driver.findElement(By.xpath("//button[contains(@class, 'button--apply')]"));
-        applyButton.click();
-        Sleeper.SYSTEM_SLEEPER.sleep(new Duration(5, TimeUnit.SECONDS));
+        Assert.assertTrue(searchResultService.openAllFiltersAndCheckBlock(FILTERS_BLOCK_TITLE),
+                "'All people filters block' is displayed");
+        searchResultService.applyLocationFilter(LOCATION_FILTER_VALUE);
+        searchResultService.applyIndustryFilter(INDUSTRY_FILTER_VALUE1);
+        searchResultService.applyIndustryFilter(INDUSTRY_FILTER_VALUE2);
+        searchResultService.clickApplyFiltersButton();
     }
 
     @Test(dependsOnMethods = {"setFilters"})
