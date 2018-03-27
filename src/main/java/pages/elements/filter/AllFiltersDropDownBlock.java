@@ -1,16 +1,15 @@
-package pages.elements.filters;
+package pages.elements.filter;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import pages.elements.filters.containers.IndustryFilterContainer;
-import pages.elements.filters.containers.LocationFilterContainer;
+import pages.elements.filter.containers.IndustryFilterContainer;
+import pages.elements.filter.containers.LocationFilterContainer;
+import utils.page_elements.containers.impl.AbstractContainer;
+import utils.page_elements.elements.impl.Button;
 
 /**
  * Created on 23.03.2018
  */
-public class AllFiltersDropDownBlock {
+public class AllFiltersDropDownBlock extends AbstractContainer {
 
     @FindBy(className = "search-s-facet--facetIndustry")
     private IndustryFilterContainer industryFilterContainer;
@@ -20,21 +19,16 @@ public class AllFiltersDropDownBlock {
 
     //TODO can be joined in TopBar element
     @FindBy(id = "advanced-facets-modal-header")
-    private WebElement allFiltersBlockTitle;
+    private Button allFiltersBlockTitle;
 
     @FindBy(xpath = "//button[contains(@class, 'button--apply')]")
-    private WebElement applyFilterButton;
+    private Button applyFilterButton;
 
-    public AllFiltersDropDownBlock(WebDriver driver) {
-        industryFilterContainer = PageFactory.initElements(driver, IndustryFilterContainer.class);
-        locationsFilterContainer = PageFactory.initElements(driver, LocationFilterContainer.class);
-    }
-
-    public WebElement getApplyFilterButton() {
+    public Button getApplyFilterButton() {
         return applyFilterButton;
     }
 
-    public WebElement getAllFiltersBlockTitle() {
+    public Button getAllFiltersBlockTitle() {
         return allFiltersBlockTitle;
     }
 

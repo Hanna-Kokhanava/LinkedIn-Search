@@ -13,7 +13,7 @@ public class SearchContactsTest extends BaseTestCase {
     private SearchResultService searchResultService;
     private HomeService homeService;
 
-    //TODO can be place into property file + PropertyLoader implementation
+    //TODO can be placed into property file + PropertyLoader implementation
     private static final String SEARCH_VALUE = "HR manager";
     private static final String FILTERS_BLOCK_TITLE = "All people filters";
     private static final String LOCATION_FILTER_VALUE = "Poland";
@@ -22,8 +22,8 @@ public class SearchContactsTest extends BaseTestCase {
 
     @BeforeClass
     public void initializeServices() {
+        homeService = new HomeService(driver, waiter);
         searchResultService = new SearchResultService(driver, waiter);
-        homeService = new HomeService(driver);
     }
 
     @Test(description = "Go to Search input and type search value")
@@ -34,7 +34,7 @@ public class SearchContactsTest extends BaseTestCase {
     @Test(dependsOnMethods = {"goToSearchAndTypeValue"})
     public void setFiltersValue() throws InterruptedException {
         Assert.assertTrue(searchResultService.openAllFiltersAndCheckBlock(FILTERS_BLOCK_TITLE),
-                "'All people filters block' is displayed");
+                "'All people filter block' is displayed");
         searchResultService.applyLocationFilter(LOCATION_FILTER_VALUE);
         searchResultService.applyIndustryFilter(INDUSTRY_FILTER_VALUE1);
         searchResultService.applyIndustryFilter(INDUSTRY_FILTER_VALUE2);

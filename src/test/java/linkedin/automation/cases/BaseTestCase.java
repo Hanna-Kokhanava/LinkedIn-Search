@@ -36,10 +36,11 @@ public abstract class BaseTestCase {
         options.addArguments("--start-maximized");
 
         driver = new ChromeDriver(options);
+        driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().to(URL);
 
-        waiter = new WebDriverWait(driver, 10);
+        waiter = new WebDriverWait(driver, 15);
     }
 
     @AfterSuite(alwaysRun = true)

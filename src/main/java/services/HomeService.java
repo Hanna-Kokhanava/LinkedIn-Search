@@ -2,17 +2,21 @@ package services;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.HomePage;
 
 /**
  * Created on 22.03.2018
  */
 public class HomeService {
+    private WebDriverWait waiter;
     private HomePage homePage;
 
-    public HomeService(WebDriver driver) {
-        homePage = PageFactory.initElements(driver, HomePage.class);
+    public HomeService(WebDriver driver, WebDriverWait waiter) {
+        homePage = new HomePage();
+        homePage.init(driver);
+        this.waiter = waiter;
     }
 
     /**
@@ -23,6 +27,6 @@ public class HomeService {
         System.out.println("Type search criteria to the input");
         homePage.getSearchField().click();
         homePage.getSearchInput().sendKeys(searchValue);
-        homePage.getSearchInput().sendKeys(Keys.RETURN);
+        homePage.getSearchInput().sendKeys(Keys.ENTER);
     }
 }

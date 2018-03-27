@@ -4,11 +4,11 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.server.browserlaunchers.Sleeper;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
-import pages.elements.search.items.SearchResultItem;
+import pages.elements.search.items.PersonSearchResultItem;
+import utils.page_elements.elements.impl.TextInput;
 
 import java.util.List;
 
@@ -24,32 +24,34 @@ public class SearchResultService {
     }
 
     public SearchResultService(WebDriver driver, WebDriverWait waiter) {
-        searchResultPage = PageFactory.initElements(driver, SearchResultPage.class);
+        searchResultPage = new SearchResultPage();
+        searchResultPage.init(driver);
         this.waiter = waiter;
     }
 
-    public List<SearchResultItem> getPersonBlocksList() {
-        return searchResultPage.getSearchResultsBlock().getPersonContainersList();
-    }
-
     /**
-     * Click on 'All Filters' button and check 'All people filters' block appears
+     * Click on 'All Filters' button and check 'All people filter' block appears
      */
     public boolean openAllFiltersAndCheckBlock(String blockTitleString) {
-        System.out.println("Click 'All filters' button and check that filter block appears");
+        System.out.println("Click 'All filter' button and check that filter block appears");
         WebElement allFiltersButton = getPage().getAllFiltersButton();
         waiter.until(ExpectedConditions.visibilityOf(allFiltersButton));
         allFiltersButton.click();
         WebElement blockTitleElement = getPage().getAllFiltersDropDownBlock().getAllFiltersBlockTitle();
+        System.out.println("Actual block element title : " + blockTitleElement.getText());
         return blockTitleElement.isDisplayed() && blockTitleElement.getText().equals(blockTitleString);
     }
 
     /**
-     * Click on 'Apply' button on the top bar to close dropdown filters block
+     * Click on 'Apply' button on the top bar to close dropdown filter block
      */
     public void clickApplyFiltersButton() {
         System.out.println("Click 'Apply' filter button");
         getPage().getAllFiltersDropDownBlock().getApplyFilterButton().click();
+    }
+
+    public List<PersonSearchResultItem> getPersonBlocksList() {
+        return getPage().getPersonContainersList();
     }
 
     /**
@@ -59,7 +61,8 @@ public class SearchResultService {
      */
     public void applyLocationFilter(String locationFilterValue) {
         System.out.println("Set 'Location' filter value as " + locationFilterValue);
-        WebElement filterInput = getPage().getAllFiltersDropDownBlock().getLocationsFilterContainer().getFilterInput();
+        TextInput filterInput = getPage().getAllFiltersDropDownBlock().getLocationsFilterContainer().getFilterInput();
+        waiter.until(ExpectedConditions.visibilityOf(filterInput));
         setFilterValue(filterInput, locationFilterValue);
     }
 
@@ -70,7 +73,8 @@ public class SearchResultService {
      */
     public void applyIndustryFilter(String industryFilterValue) {
         System.out.println("Set 'Industry' filter value as " + industryFilterValue);
-        WebElement filterInput = getPage().getAllFiltersDropDownBlock().getIndustryFilterContainer().getFilterInput();
+        TextInput filterInput = getPage().getAllFiltersDropDownBlock().getIndustryFilterContainer().getFilterInput();
+        waiter.until(ExpectedConditions.visibilityOf(filterInput));
         setFilterValue(filterInput, industryFilterValue);
     }
 
@@ -80,12 +84,12 @@ public class SearchResultService {
      * @param filterInput input element for filter
      * @param filterValue filter string value
      */
-    private void setFilterValue(WebElement filterInput, String filterValue) {
+    private void setFilterValue(TextInput filterInput, String filterValue) {
         filterInput.click();
         filterInput.sendKeys(filterValue);
         waiter.until(ExpectedConditions.attributeContains(filterInput, "aria-expanded", "true"));
         //Is needed, because script runs too fast and close entire dropdown block
-        Sleeper.sleepTightInSeconds(1);
+        Sleeper.sleepTightInSeconds(2);
         filterInput.sendKeys(Keys.ENTER);
     }
 }
