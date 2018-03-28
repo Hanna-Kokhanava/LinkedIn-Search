@@ -43,7 +43,6 @@ public class SearchContactsTest extends BaseTestCase {
 
     @Test(dependsOnMethods = {"setFiltersValue"})
     public void getPersonInfo() {
-        searchResultService.getPersonBlocksList();
-
+        searchResultService.getPersonInfo();
     }
 }

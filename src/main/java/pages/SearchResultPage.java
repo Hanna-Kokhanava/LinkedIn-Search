@@ -1,15 +1,11 @@
 package pages;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import pages.elements.common.impl.Button;
 import pages.elements.filter.AllFiltersDropDownBlock;
-import pages.elements.search.items.PersonSearchResultItem;
 import utils.decorator.ExtendedFieldDecorator;
-
-import java.util.List;
 
 /**
  * Created on 22.03.2018
@@ -19,22 +15,12 @@ public class SearchResultPage implements Page {
     @FindBy(id = "artdeco-modal-outlet")
     private AllFiltersDropDownBlock allFiltersDropDownBlock;
 
-    @FindBy(xpath = "//div[contains(@class, 'search-result--person')]")
-    private List<PersonSearchResultItem> personContainersList;
-
-    public List<PersonSearchResultItem> getPersonContainersList() {
-        return personContainersList;
-    }
-
     //TODO Can be placed on TopBar
     @FindBy(xpath = "//button[contains(@class, 'all-filter')]")
     private Button allFiltersButton;
 
-    @FindBy(xpath = "//span[contains(@class, 'search-vertical-filter__dropdown-trigger-text')]")
-    private Button searchCriteriaButton;
-
-    @FindBy(xpath = "//button[contains(@class, 'list-item-button--PEOPLE')]")
-    private Button peopleCriteriaButton;
+    @FindBy(className = "next-text")
+    private Button nextPageButton;
 
     @Override
     public void init(WebDriver driver) {
@@ -49,13 +35,8 @@ public class SearchResultPage implements Page {
         return allFiltersButton;
     }
 
-    public Button getSearchCriteriaButton() {
-        return searchCriteriaButton;
+
+    public Button getNextPageButton() {
+        return nextPageButton;
     }
-
-    public Button getPeopleCriteriaButton() {
-        return peopleCriteriaButton;
-    }
-
-
 }

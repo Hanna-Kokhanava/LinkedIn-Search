@@ -14,7 +14,6 @@ import java.util.List;
 public class LocatingCustomElementListHandler implements InvocationHandler {
     private final ElementLocator locator;
     private final Class<Element> clazz;
-    private final DefaultElementFactory factory = new DefaultElementFactory();
 
     public LocatingCustomElementListHandler(ElementLocator locator, Class<Element> clazz) {
         this.locator = locator;
@@ -26,7 +25,7 @@ public class LocatingCustomElementListHandler implements InvocationHandler {
         List<Element> customs = new ArrayList<>();
 
         for (WebElement element : elements) {
-            customs.add(factory.create(clazz, element));
+            customs.add(clazz.getConstructor(WebElement.class).newInstance(element));
         }
         try {
             return method.invoke(customs, args);
