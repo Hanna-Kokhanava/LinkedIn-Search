@@ -1,4 +1,4 @@
-package utils.page_elements.elements.impl;
+package pages.elements.common.impl;
 
 import org.openqa.selenium.WebElement;
 

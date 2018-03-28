@@ -1,10 +1,11 @@
 package pages.elements.filter;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import pages.elements.common.impl.Button;
 import pages.elements.filter.containers.IndustryFilterContainer;
 import pages.elements.filter.containers.LocationFilterContainer;
-import utils.page_elements.containers.impl.AbstractContainer;
-import utils.page_elements.elements.impl.Button;
+import pages.elements.filter.containers.impl.AbstractContainer;
 
 /**
  * Created on 23.03.2018
@@ -23,6 +24,10 @@ public class AllFiltersDropDownBlock extends AbstractContainer {
 
     @FindBy(xpath = "//button[contains(@class, 'button--apply')]")
     private Button applyFilterButton;
+
+    public AllFiltersDropDownBlock(WebElement webElement) {
+        super(webElement);
+    }
 
     public Button getApplyFilterButton() {
         return applyFilterButton;

@@ -2,7 +2,8 @@ package pages.elements.search.items;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import utils.page_elements.containers.impl.AbstractContainer;
+import pages.elements.common.impl.Button;
+import pages.elements.filter.containers.impl.AbstractContainer;
 
 /**
  * Created on 25.03.2018
@@ -10,7 +11,7 @@ import utils.page_elements.containers.impl.AbstractContainer;
 public class PersonSearchResultItem extends AbstractContainer {
 
     @FindBy(className = "search-result__actions--primary")
-    private WebElement connectButton;
+    private Button connectButton;
 
     @FindBy(className = "search-result__result-link")
     private WebElement contactLink;
@@ -26,6 +27,10 @@ public class PersonSearchResultItem extends AbstractContainer {
 
     @FindBy(className = "search-result__snippets")
     private WebElement personAdditionalInfo;
+
+    public PersonSearchResultItem(WebElement webElement) {
+        super(webElement);
+    }
 
     public WebElement getConnectButton() {
         return connectButton;

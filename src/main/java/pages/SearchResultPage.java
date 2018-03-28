@@ -4,10 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import pages.elements.common.impl.Button;
 import pages.elements.filter.AllFiltersDropDownBlock;
-import pages.elements.search.SearchResultsBlock;
 import pages.elements.search.items.PersonSearchResultItem;
-import utils.page_factory.decorator.ExtendedFieldDecorator;
+import utils.decorator.ExtendedFieldDecorator;
 
 import java.util.List;
 
@@ -28,13 +28,13 @@ public class SearchResultPage implements Page {
 
     //TODO Can be placed on TopBar
     @FindBy(xpath = "//button[contains(@class, 'all-filter')]")
-    private WebElement allFiltersButton;
+    private Button allFiltersButton;
 
     @FindBy(xpath = "//span[contains(@class, 'search-vertical-filter__dropdown-trigger-text')]")
-    private WebElement searchCriteriaButton;
+    private Button searchCriteriaButton;
 
     @FindBy(xpath = "//button[contains(@class, 'list-item-button--PEOPLE')]")
-    private WebElement peopleCriteriaButton;
+    private Button peopleCriteriaButton;
 
     @Override
     public void init(WebDriver driver) {
@@ -45,15 +45,15 @@ public class SearchResultPage implements Page {
         return allFiltersDropDownBlock;
     }
 
-    public WebElement getAllFiltersButton() {
+    public Button getAllFiltersButton() {
         return allFiltersButton;
     }
 
-    public WebElement getSearchCriteriaButton() {
+    public Button getSearchCriteriaButton() {
         return searchCriteriaButton;
     }
 
-    public WebElement getPeopleCriteriaButton() {
+    public Button getPeopleCriteriaButton() {
         return peopleCriteriaButton;
     }
 

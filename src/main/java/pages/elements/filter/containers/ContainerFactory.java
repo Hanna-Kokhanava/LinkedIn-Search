@@ -1,4 +1,4 @@
-package utils.page_elements.containers;
+package pages.elements.filter.containers;
 
 import org.openqa.selenium.WebElement;
 

@@ -1,8 +1,9 @@
 package pages.elements.search;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import pages.elements.search.items.PersonSearchResultItem;
-import utils.page_elements.containers.impl.AbstractContainer;
+import pages.elements.filter.containers.impl.AbstractContainer;
 
 import java.util.List;
 
@@ -13,6 +14,10 @@ public class SearchResultsBlock extends AbstractContainer {
 
     @FindBy(xpath = "//div[contains(@class, 'search-result--person')]")
     private List<PersonSearchResultItem> personContainersList;
+
+    public SearchResultsBlock(WebElement webElement) {
+        super(webElement);
+    }
 
     public List<PersonSearchResultItem> getPersonContainersList() {
         return personContainersList;

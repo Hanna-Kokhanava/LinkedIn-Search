@@ -4,8 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import utils.page_elements.elements.impl.TextInput;
-import utils.page_factory.decorator.ExtendedFieldDecorator;
+import pages.elements.common.impl.TextInput;
+import utils.decorator.ExtendedFieldDecorator;
 
 /**
  * Created on 22.03.2018

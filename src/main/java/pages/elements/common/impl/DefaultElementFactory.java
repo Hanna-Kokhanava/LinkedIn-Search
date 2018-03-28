@@ -1,8 +1,8 @@
-package utils.page_elements.elements.impl;
+package pages.elements.common.impl;
 
 import org.openqa.selenium.WebElement;
-import utils.page_elements.elements.Element;
-import utils.page_elements.elements.ElementFactory;
+import pages.elements.common.Element;
+import pages.elements.common.ElementFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -15,17 +15,18 @@ public class DefaultElementFactory implements ElementFactory {
     @Override
     public <E extends Element> E create(Class<E> elementClass, WebElement wrappedElement) {
         try {
-            return findImplementationFor(elementClass)
-                    .getDeclaredConstructor(WebElement.class)
-                    .newInstance(wrappedElement);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            return elementClass.getConstructor(WebElement.class).
+                    newInstance(wrappedElement);
+        } catch (Exception e) {
+            throw new AssertionError(
+                    "WebElement can't be represented as " + elementClass
+            );
         }
     }
 
     private <E extends Element> Class<? extends E> findImplementationFor(final Class<E> elementClass) {
         try {
-            return (Class<? extends E>) Class.forName(format("{0}.{1}Impl",
+            return (Class<? extends E>) Class.forName(format("{0}.{1}",
                     getClass().getPackage().getName(), elementClass.getSimpleName()));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

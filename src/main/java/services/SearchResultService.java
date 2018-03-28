@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
 import pages.elements.search.items.PersonSearchResultItem;
-import utils.page_elements.elements.impl.TextInput;
+import pages.elements.common.impl.TextInput;
 
 import java.util.List;
 

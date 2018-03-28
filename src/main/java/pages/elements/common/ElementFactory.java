@@ -1,7 +1,6 @@
-package utils.page_elements.elements;
+package pages.elements.common;
 
 import org.openqa.selenium.WebElement;
-import utils.page_elements.elements.Element;
 
 /**
  * Created on 27.03.2018

@@ -1,18 +1,22 @@
-package utils.page_elements.elements.impl;
+package pages.elements.filter.containers.impl;
 
 import org.openqa.selenium.*;
-import utils.page_elements.elements.Element;
+import pages.elements.filter.containers.Container;
 
 import java.util.List;
 
 /**
- * Created on 26.03.2018
+ * Created on 27.03.2018
  */
-public abstract class AbstractElement implements Element {
-
+public abstract class AbstractContainer implements Container {
     private WebElement webElement;
 
-    public AbstractElement(WebElement webElement) {
+    public AbstractContainer(WebElement webElement) {
+        this.webElement = webElement;
+    }
+
+    @Override
+    public final void init(final WebElement webElement) {
         this.webElement = webElement;
     }
 
@@ -83,9 +87,5 @@ public abstract class AbstractElement implements Element {
 
     public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
         return webElement.getScreenshotAs(outputType);
-    }
-
-    public WebElement getWebElement() {
-        return webElement;
     }
 }
