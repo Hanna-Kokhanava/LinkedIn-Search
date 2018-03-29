@@ -8,7 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
-import pages.elements.common.impl.Button;
 import pages.elements.common.impl.TextInput;
 
 import java.util.ArrayList;
@@ -110,6 +109,8 @@ public class SearchResultService {
     public List<PersonSearchResultItem> getPersonInfoList() {
         List<PersonSearchResultItem> searchResultItems = new ArrayList<>();
         String contactLink, name, profession, location, additionalInfo;
+        //With stable internet connection, after filter applying, page need time to refresh result items
+        Sleeper.sleepTightInSeconds(2);
 
         do {
             waitForPageLoad();
@@ -117,10 +118,9 @@ public class SearchResultService {
             for (WebElement element : elements) {
                 try {
                     Actions action = new Actions(driver);
-                    action.moveToElement(element);
-                    action.perform();
-                    additionalInfo = "";
+                    action.moveToElement(element).perform();
 
+                    additionalInfo = "";
                     contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
                     name = element.findElement(By.className("actor-name")).getText();
                     profession = element.findElement(By.className("subline-level-1")).getText();
@@ -139,7 +139,6 @@ public class SearchResultService {
             }
 
         } while (clickOnNextPageButton());
-
         return searchResultItems;
     }
 
@@ -150,13 +149,12 @@ public class SearchResultService {
         WebElement nextButton;
         try {
             nextButton = getPage().getNextPageButton().getWebElement();
-
             Actions action = new Actions(driver);
             action.moveToElement(nextButton).perform();
+            nextButton.click();
+            return true;
         } catch (NoSuchElementException e) {
             return false;
         }
-        nextButton.click();
-        return true;
     }
 }

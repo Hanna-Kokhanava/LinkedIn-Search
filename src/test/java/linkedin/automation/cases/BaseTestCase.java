@@ -43,7 +43,6 @@ public abstract class BaseTestCase {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().to(URL);
         waitForPageLoad();
-
     }
 
     /**
