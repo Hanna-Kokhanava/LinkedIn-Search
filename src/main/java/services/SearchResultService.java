@@ -9,9 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
 import pages.elements.common.impl.TextInput;
+import utils.reporting.ContactsInfoReport;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -21,6 +24,8 @@ public class SearchResultService {
     private SearchResultPage searchResultPage;
     private WebDriverWait waiter;
     private WebDriver driver;
+
+    private ContactsInfoReport reportManager = new ContactsInfoReport();
 
     private SearchResultPage getPage() {
         return searchResultPage;
@@ -106,9 +111,10 @@ public class SearchResultService {
     /**
      * Returns list of {@link PersonSearchResultItem} items from all search result pages
      */
-    public List<PersonSearchResultItem> getPersonInfoList() {
-        List<PersonSearchResultItem> searchResultItems = new ArrayList<>();
+    public void getPersonInfoList() {
+        reportManager.createReportFile();
         String contactLink, name, profession, location, additionalInfo;
+        String company = "";
         //With stable internet connection, after filter applying, page need time to refresh result items
         Sleeper.sleepTightInSeconds(2);
 
@@ -121,6 +127,7 @@ public class SearchResultService {
                     action.moveToElement(element).perform();
 
                     additionalInfo = "";
+                    company = "";
                     contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
                     name = element.findElement(By.className("actor-name")).getText();
                     profession = element.findElement(By.className("subline-level-1")).getText();
@@ -132,14 +139,29 @@ public class SearchResultService {
                 if (!profession.contains("at")) {
                     try {
                         additionalInfo = element.findElement(By.className("search-result__snippets")).getText();
+                        //TODO get company name from additional info - string after 'at'
                     } catch (NoSuchElementException | StaleElementReferenceException e) {
                     }
+                } else {
+                    //TODO get company name from profession - string after 'at'
                 }
-                searchResultItems.add(new PersonSearchResultItem(contactLink, name, profession, location, additionalInfo));
+                reportPersonInfoToFile(new PersonSearchResultItem(name, company, location, contactLink));
             }
 
         } while (clickOnNextPageButton());
-        return searchResultItems;
+    }
+
+    private void reportPersonInfoToFile(PersonSearchResultItem item) {
+        Map<ContactsInfoReport.Columns, String> reportInfo = new HashMap<>();
+        reportInfo.put(ContactsInfoReport.Columns.NAME, item.getName());
+        reportInfo.put(ContactsInfoReport.Columns.COMPANY, item.getCompany());
+        reportInfo.put(ContactsInfoReport.Columns.LOCATION, item.getLocation());
+        reportInfo.put(ContactsInfoReport.Columns.LINK, item.getContactLink());
+        try {
+            reportManager.savePersonInfo(reportInfo);
+        } catch (IOException e) {
+            System.out.println("Error occured during writing to file");
+        }
     }
 
     /**

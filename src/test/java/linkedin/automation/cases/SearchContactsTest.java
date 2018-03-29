@@ -48,7 +48,7 @@ public class SearchContactsTest extends BaseTestCase {
 
     @Test(dependsOnMethods = {"setFiltersValue"})
     public void getPersonInfo() {
-        List<PersonSearchResultItem> personInfoList = searchResultService.getPersonInfoList();
+        searchResultService.getPersonInfoList();
         //TODO write fo Excel file
     }
 }

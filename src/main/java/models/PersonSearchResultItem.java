@@ -1,19 +1,16 @@
 package models;
 
 public class PersonSearchResultItem {
-    private String contactLink;
     private String name;
-    private String profession;
+    private String company;
     private String location;
-    private String additionalInfo;
+    private String contactLink;
 
-    public PersonSearchResultItem(String contactLink, String name,
-                                  String profession, String location, String additionalInfo) {
-        this.contactLink = contactLink;
+    public PersonSearchResultItem(String name, String company, String location, String contactLink) {
         this.name = name;
-        this.profession = profession;
+        this.company = company;
         this.location = location;
-        this.additionalInfo = additionalInfo;
+        this.contactLink = contactLink;
     }
 
     public String getContactLink() {
@@ -24,15 +21,11 @@ public class PersonSearchResultItem {
         return name;
     }
 
-    public String getProfession() {
-        return profession;
-    }
-
     public String getLocation() {
         return location;
     }
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
+    public String getCompany() {
+        return company;
     }
 }
