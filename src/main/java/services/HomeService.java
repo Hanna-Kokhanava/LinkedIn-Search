@@ -21,10 +21,12 @@ public class HomeService {
 
     /**
      * Click on search field and type search criteria to the input
+     *
      * @param searchValue - search value
      */
     public void goToSearchFormAndTypeValue(String searchValue) {
         System.out.println("Type search criteria to the input");
+        waiter.until(ExpectedConditions.visibilityOf(homePage.getSearchField()));
         homePage.getSearchField().click();
         homePage.getSearchInput().sendKeys(searchValue);
         homePage.getSearchInput().sendKeys(Keys.ENTER);

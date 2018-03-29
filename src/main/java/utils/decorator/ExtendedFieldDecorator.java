@@ -29,9 +29,11 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
         super(new DefaultElementLocatorFactory(searchContext));
     }
 
+    /**
+     * Decorate field
+     */
     @Override
     public Object decorate(final ClassLoader loader, final Field field) {
-
         Class<?> decoratableClass = decoratableClass(field);
 
         if (decoratableClass != null) {
@@ -51,34 +53,27 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
             if (Element.class.isAssignableFrom(field.getType())) {
                 return createElement(loader, locator, (Class<Element>) decoratableClass);
             }
-
         }
-
         return super.decorate(loader, field);
     }
 
     /**
-     * Возвращает декорируемый класс поля,
-     * либо null если класс не подходит для декоратора
+     * Returns decoratable field class or null if class is not suitable for decorator
      */
     private Class<?> decoratableClass(Field field) {
         Class<?> clazz = field.getType();
 
         if (List.class.isAssignableFrom(clazz)) {
-
             if (field.getAnnotation(FindBy.class) == null &&
                     field.getAnnotation(FindBys.class) == null) {
                 return null;
             }
 
-            // Список должен быть параметризирован
             Type genericType = field.getGenericType();
             if (!(genericType instanceof ParameterizedType)) {
                 return null;
             }
-
-            clazz = (Class<?>) ((ParameterizedType) genericType).
-                    getActualTypeArguments()[0];
+            clazz = (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
         }
 
         if (Element.class.isAssignableFrom(clazz)) {
@@ -88,19 +83,17 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
     }
 
     /**
-     * Создание элемента.
-     * Находит WebElement и передает его в кастомный класс
+     * Finds WebElement and pass it to Element custom class
      */
-    protected Element createElement(ClassLoader loader,
-                                    ElementLocator locator,
-                                    Class<Element> clazz) {
+    private Element createElement(ClassLoader loader, ElementLocator locator, Class<Element> clazz) {
         WebElement proxy = proxyForLocator(loader, locator);
         return elementFactory.create(clazz, proxy);
     }
 
-    private Container createContainer(ClassLoader loader,
-                                      ElementLocator locator,
-                                      Class<Container> clazz) {
+    /**
+     * Finds WebElement and pass it to Container custom class
+     */
+    private Container createContainer(ClassLoader loader, ElementLocator locator, Class<Container> clazz) {
         WebElement element = proxyForLocator(loader, locator);
         Container container = containerFactory.create(clazz, element);
         PageFactory.initElements(new ExtendedFieldDecorator(element), container);
@@ -108,10 +101,7 @@ public class ExtendedFieldDecorator extends DefaultFieldDecorator {
     }
 
     @SuppressWarnings("unchecked")
-    protected List<Element> createList(ClassLoader loader,
-                                       ElementLocator locator,
-                                       Class<Element> clazz) {
-
+    private List<Element> createList(ClassLoader loader, ElementLocator locator, Class<Element> clazz) {
         LocatingCustomElementListHandler handler = new LocatingCustomElementListHandler(locator, clazz);
         return (List<Element>) Proxy.newProxyInstance(loader, new Class<?>[]{List.class}, handler);
     }

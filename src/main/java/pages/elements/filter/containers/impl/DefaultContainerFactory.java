@@ -5,6 +5,7 @@ import pages.elements.filter.containers.Container;
 import pages.elements.filter.containers.ContainerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
 /**
  * Created on 27.03.2018
@@ -14,7 +15,7 @@ public class DefaultContainerFactory implements ContainerFactory {
     @Override
     public <C extends Container> C create(Class<C> containerClass, WebElement wrappedElement) {
         final C container = createInstanceOf(containerClass, wrappedElement);
-        container.init(wrappedElement);
+        Objects.requireNonNull(container, "Container is null").init(wrappedElement);
         return container;
     }
 
@@ -26,7 +27,6 @@ public class DefaultContainerFactory implements ContainerFactory {
         } catch (NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

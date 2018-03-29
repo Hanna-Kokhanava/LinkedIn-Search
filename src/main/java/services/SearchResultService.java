@@ -1,14 +1,19 @@
 package services;
 
+import models.PersonSearchResultItem;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.server.browserlaunchers.Sleeper;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SearchResultPage;
+import pages.elements.common.impl.Button;
 import pages.elements.common.impl.TextInput;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created on 22.03.2018
@@ -50,50 +55,6 @@ public class SearchResultService {
         getPage().getAllFiltersDropDownBlock().getApplyFilterButton().click();
     }
 
-    public void getPersonInfo() {
-        String contactLink;
-        String name;
-        String profession;
-        String location;
-        String additionalInfo;
-
-        do {
-            List<WebElement> elements = driver.findElements(By.xpath("//li[contains(@class, 'search-result__occluded-item')]"));
-            for (WebElement element : elements) {
-                try {
-                    Actions action = new Actions(driver);
-                    action.moveToElement(element);
-                    action.perform();
-
-                    contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
-                    System.out.println(contactLink);
-                    name = element.findElement(By.className("actor-name")).getText();
-                    System.out.println(name);
-                    profession = element.findElement(By.className("subline-level-1")).getText();
-                    System.out.println(profession);
-                    location = element.findElement(By.className("subline-level-2")).getText();
-                    System.out.println(location);
-                    additionalInfo = element.findElement(By.className("search-result__snippets")).getText();
-                    System.out.println(additionalInfo);
-                } catch (NoSuchElementException | StaleElementReferenceException e) {
-                    continue;
-                }
-
-                //TODO write to list of objects
-            }
-
-            Actions action = new Actions(driver);
-            action.moveToElement(getPage().getNextPageButton().getWebElement());
-            action.perform();
-
-            if (getPage().getNextPageButton().isDisplayed()) {
-                getPage().getNextPageButton().click();
-            } else {
-                return;
-            }
-        } while (getPage().getNextPageButton().isDisplayed());
-    }
-
     /**
      * Set 'Location' filter value
      *
@@ -131,5 +92,71 @@ public class SearchResultService {
         //Is needed, because script runs too fast and close entire dropdown block
         Sleeper.sleepTightInSeconds(2);
         filterInput.sendKeys(Keys.ENTER);
+    }
+
+    /**
+     * Waits for Page completely loaded
+     */
+    private void waitForPageLoad() {
+        ExpectedCondition<Boolean> pageLoadCondition = driver -> Objects.requireNonNull((JavascriptExecutor) driver)
+                .executeScript("return document.readyState").equals("complete");
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(pageLoadCondition);
+    }
+
+    /**
+     * Returns list of {@link PersonSearchResultItem} items from all search result pages
+     */
+    public List<PersonSearchResultItem> getPersonInfoList() {
+        List<PersonSearchResultItem> searchResultItems = new ArrayList<>();
+        String contactLink, name, profession, location, additionalInfo;
+
+        do {
+            waitForPageLoad();
+            List<WebElement> elements = driver.findElements(By.xpath("//li[contains(@class, 'search-result__occluded-item')]"));
+            for (WebElement element : elements) {
+                try {
+                    Actions action = new Actions(driver);
+                    action.moveToElement(element);
+                    action.perform();
+                    additionalInfo = "";
+
+                    contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
+                    name = element.findElement(By.className("actor-name")).getText();
+                    profession = element.findElement(By.className("subline-level-1")).getText();
+                    location = element.findElement(By.className("subline-level-2")).getText();
+                } catch (NoSuchElementException | StaleElementReferenceException e) {
+                    continue;
+                }
+
+                if (!profession.contains("at")) {
+                    try {
+                        additionalInfo = element.findElement(By.className("search-result__snippets")).getText();
+                    } catch (NoSuchElementException | StaleElementReferenceException e) {
+                    }
+                }
+                searchResultItems.add(new PersonSearchResultItem(contactLink, name, profession, location, additionalInfo));
+            }
+
+        } while (clickOnNextPageButton());
+
+        return searchResultItems;
+    }
+
+    /**
+     * Check if there is 'Next' button in Pagination bottom bar - click on it
+     */
+    private boolean clickOnNextPageButton() {
+        WebElement nextButton;
+        try {
+            nextButton = getPage().getNextPageButton().getWebElement();
+
+            Actions action = new Actions(driver);
+            action.moveToElement(nextButton).perform();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+        nextButton.click();
+        return true;
     }
 }
