@@ -49,6 +49,7 @@ public abstract class ExcelReportManager {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             workbook.write(fileOutputStream);
+            fileOutputStream.flush();
             fileOutputStream.close();
         } catch (IOException ioe) {
             System.out.println("Error happened while trying to logging report to file:\n");

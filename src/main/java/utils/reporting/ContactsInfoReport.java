@@ -44,6 +44,11 @@ public class ContactsInfoReport extends ExcelReportManager {
         return columnsMap;
     }
 
+    /**
+     * Saves one instance info to one row in excel report
+     *
+     * @param reportInfo map contains column name and its value
+     */
     public void savePersonInfo(Map<Columns, String> reportInfo) throws IOException {
         Row row = sheet.createRow(rowStartNumber);
         for (Columns column : reportInfo.keySet()) {
@@ -58,6 +63,11 @@ public class ContactsInfoReport extends ExcelReportManager {
         writeWorkbookToFile();
     }
 
+    /**
+     * Create cell with link type for the last info column
+     *
+     * @param row {@link} Row
+     */
     private void createLinkTypeForLastColumn(Row row) {
         CellStyle style = createHyperLinkCellStyle();
         Cell hyperLinkCell = row.getCell(Columns.LINK.number);

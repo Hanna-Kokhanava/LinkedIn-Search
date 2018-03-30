@@ -113,8 +113,7 @@ public class SearchResultService {
      */
     public void getPersonInfoList() {
         reportManager.createReportFile();
-        String contactLink, name, profession, location, additionalInfo;
-        String company = "";
+        String contactLink, name, profession, location, company;
         //With stable internet connection, after filter applying, page need time to refresh result items
         Sleeper.sleepTightInSeconds(2);
 
@@ -126,8 +125,6 @@ public class SearchResultService {
                     Actions action = new Actions(driver);
                     action.moveToElement(element).perform();
 
-                    additionalInfo = "";
-                    company = "";
                     contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
                     name = element.findElement(By.className("actor-name")).getText();
                     profession = element.findElement(By.className("subline-level-1")).getText();
@@ -136,21 +133,42 @@ public class SearchResultService {
                     continue;
                 }
 
-                if (!profession.contains("at")) {
-                    try {
-                        additionalInfo = element.findElement(By.className("search-result__snippets")).getText();
-                        //TODO get company name from additional info - string after 'at'
-                    } catch (NoSuchElementException | StaleElementReferenceException e) {
-                    }
-                } else {
-                    //TODO get company name from profession - string after 'at'
-                }
+                //Company name is the string after 'at' word in additional info or in profession string
+                company = parseAndGetCompanyName(element, profession);
                 reportPersonInfoToFile(new PersonSearchResultItem(name, company, location, contactLink));
             }
 
         } while (clickOnNextPageButton());
     }
 
+    private String parseAndGetCompanyName(WebElement element, String profession) {
+        String companyStrFlag = " at";
+        String company;
+        String additionalInfo;
+        int startIndex;
+
+        if (!profession.contains(companyStrFlag)) {
+            try {
+                additionalInfo = element.findElement(By.className("search-result__snippets")).getText();
+                startIndex = additionalInfo.indexOf(companyStrFlag) + companyStrFlag.length();
+                company = additionalInfo.substring(startIndex);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                company = "";
+            }
+        } else {
+            startIndex = profession.indexOf(companyStrFlag) + companyStrFlag.length();
+            company = profession.substring(startIndex);
+        }
+
+        return company;
+    }
+
+    /**
+     * Creates Map contains column name and its row value
+     * Pass this Map to {@link ContactsInfoReport}
+     *
+     * @param item {@link PersonSearchResultItem} item
+     */
     private void reportPersonInfoToFile(PersonSearchResultItem item) {
         Map<ContactsInfoReport.Columns, String> reportInfo = new HashMap<>();
         reportInfo.put(ContactsInfoReport.Columns.NAME, item.getName());
@@ -160,7 +178,7 @@ public class SearchResultService {
         try {
             reportManager.savePersonInfo(reportInfo);
         } catch (IOException e) {
-            System.out.println("Error occured during writing to file");
+            System.out.println("Error occured during writing info to report file");
         }
     }
 
