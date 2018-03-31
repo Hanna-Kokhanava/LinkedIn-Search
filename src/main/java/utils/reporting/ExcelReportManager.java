@@ -29,10 +29,15 @@ public abstract class ExcelReportManager {
 
     protected abstract Map<String, Integer> getColumnsMapFromEnum();
 
-    public File createReportFile() {
-        file = createReportFilePattern(getReportName());
+    public void createReportFile() {
+        this.file = createReportFilePattern(getReportName());
         generateColumns(getColumnsMapFromEnum());
-        return file;
+        //TODO to start writing info to existing file, starts with the last row
+//        if (file.exists() && !file.isDirectory()) {
+//            lastRowNumber = getLastRowNumber(file);
+//        } else {
+//            generateColumns(getColumnsMapFromEnum());
+//        }
     }
 
     private void generateColumns(Map<String, Integer> columns) {
@@ -44,6 +49,12 @@ public abstract class ExcelReportManager {
         }
         writeWorkbookToFile();
     }
+
+    //TODO get last row in already existing file
+//    private int getLastRowNumber(File file) {
+//        Sheet sheet = workbook.getSheetAt(0);
+//        return sheet.getLastRowNum();
+//    }
 
     protected void writeWorkbookToFile() {
         try {
@@ -57,8 +68,9 @@ public abstract class ExcelReportManager {
     }
 
     private File createReportFilePattern(String fileName) {
-        String fileNameWithDate = String.format("%s" + fileName + ".xlsx",
-                dateFormat.format(currentDate.getTime()));
+        //TODO for writing in the same file
+//        String fileNameWithDate = String.format(fileName + ".xlsx", dateFormat.format(currentDate.getTime()));
+        String fileNameWithDate = String.format("%s" + fileName + ".xlsx", dateFormat.format(currentDate.getTime()));
         return new File(FileManager.ResultFolder.REPORT_FOLDER.getLocalDir(), fileNameWithDate);
     }
 

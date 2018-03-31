@@ -127,6 +127,10 @@ public class SearchResultService {
 
                     contactLink = element.findElement(By.className("search-result__result-link")).getAttribute("href");
                     name = element.findElement(By.className("actor-name")).getText();
+                    //Skip element without normal member name
+                    if (name.equalsIgnoreCase("LinkedIn Member")) {
+                        continue;
+                    }
                     profession = element.findElement(By.className("subline-level-1")).getText();
                     location = element.findElement(By.className("subline-level-2")).getText();
                 } catch (NoSuchElementException | StaleElementReferenceException e) {
@@ -193,7 +197,7 @@ public class SearchResultService {
             action.moveToElement(nextButton).perform();
             nextButton.click();
             return true;
-        } catch (NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
